@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import './App.css';
@@ -6,7 +7,27 @@ import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/signin-and-signup/signin-and-signup.component';
 
-function App() {
+import { auth } from "./firebase/firebase.utils";
+
+const App = () => {
+  const [currUser, setCurrUser] = useState(null);
+  console.log("currUser", currUser);
+
+  let unsubscribeFromAuth = null;
+
+  // componentDidMount
+  useEffect(() => {
+      unsubscribeFromAuth = auth.onAuthStateChanged( user => {
+          setCurrUser(user);
+          console.log(user);
+      })
+
+  });
+  // componentWillUnmount
+  useEffect(() => {
+      return unsubscribeFromAuth();
+  }, [])
+
   return (
     <div>
       <Header />
