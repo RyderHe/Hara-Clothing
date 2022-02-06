@@ -19,18 +19,19 @@ const App = () => {
   useEffect(() => {
       unsubscribeFromAuth = auth.onAuthStateChanged( user => {
           setCurrUser(user);
-          console.log(user);
+          console.log("APP COMPONENTDIDMPUNT", user);
       })
 
   });
   // componentWillUnmount
   useEffect(() => {
+    console.log("APP COMPONENTWILLUNMPUNT");
       return unsubscribeFromAuth();
   }, [])
 
   return (
     <div>
-      <Header />
+      <Header currUser={currUser} />
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/shop" component={ShopPage} />
