@@ -32,12 +32,12 @@ const App = () => {
             });
             
             })
+            console.log("APP COMPONENT DID MPUNT", currUser);
           } else {
             setCurrUser(userAuth);
           }
 
 
-          console.log("APP COMPONENT DID MPUNT", currUser);
           return unsubscribeFromAuth();
       })
 
