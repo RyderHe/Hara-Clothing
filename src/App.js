@@ -11,16 +11,12 @@ import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 const App = () => {
   const [currUser, setCurrUser] = useState(null);
-  // console.log("currUser", currUser);
 
-  // const unsubscribeFromAuth = useRef(null);
-  // let unsubscribeFromAuth = null;
-
-  // componentDidMount
   useEffect(() => {
-      let unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
-        // createUserProfileDocument(user)
-        if (userAuth) {
+      console.log("Im subscribing....")
+      // Oberver for changes to the user's authentication state, when sign in / sign out
+      const unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
+        if (userAuth) { // user sign in
           const userRef = await createUserProfileDocument(userAuth);
           userRef.onSnapshot(snapShot => {
             console.log("here")
@@ -32,20 +28,19 @@ const App = () => {
             });
             
             })
-            console.log("APP COMPONENT DID MPUNT", currUser);
-          } else {
+            console.log("APP COMPONENT DID MOUNT", currUser);
+          } else { // user sign out
+            console.log("APP COMPONENT DID MOUNT", currUser);
             setCurrUser(userAuth);
           }
-
-
-          return unsubscribeFromAuth();
       })
+      return () => {
+          console.log("Im unsubscribing....")
+          unsubscribeFromAuth();
+      }
 
-  });
-  // componentWillUnmount
-  // useEffect(() => {
-  //   console.log("APP COMPONENTWILLUNMPUNT");
-  // }, [])
+  }, []);
+
 
   return (
     <div>
