@@ -7,27 +7,45 @@ import ShopPage from './pages/shop/shop.component';
 import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/signin-and-signup/signin-and-signup.component';
 
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 const App = () => {
   const [currUser, setCurrUser] = useState(null);
-  console.log("currUser", currUser);
+  // console.log("currUser", currUser);
 
-  let unsubscribeFromAuth = null;
+  // const unsubscribeFromAuth = useRef(null);
+  // let unsubscribeFromAuth = null;
 
   // componentDidMount
   useEffect(() => {
-      unsubscribeFromAuth = auth.onAuthStateChanged( user => {
-          setCurrUser(user);
-          console.log("APP COMPONENTDIDMPUNT", user);
+      let unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
+        // createUserProfileDocument(user)
+        if (userAuth) {
+          const userRef = await createUserProfileDocument(userAuth);
+          userRef.onSnapshot(snapShot => {
+            console.log("here")
+            console.log(snapShot);
+            console.log(snapShot.data());
+            setCurrUser({
+              id: snapShot.id,
+              ...snapShot.data()
+            });
+            
+            })
+          } else {
+            setCurrUser(userAuth);
+          }
+
+
+          console.log("APP COMPONENT DID MPUNT", currUser);
+          return unsubscribeFromAuth();
       })
 
   });
   // componentWillUnmount
-  useEffect(() => {
-    console.log("APP COMPONENTWILLUNMPUNT");
-      return unsubscribeFromAuth();
-  }, [])
+  // useEffect(() => {
+  //   console.log("APP COMPONENTWILLUNMPUNT");
+  // }, [])
 
   return (
     <div>
