@@ -14,7 +14,7 @@ const App = () => {
 
   useEffect(() => {
       console.log("Im subscribing....")
-      // Oberver for changes to the user's authentication state, when sign in / sign out
+      // Observer for changes to the user's authentication state, when sign in / sign out
       const unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
         if (userAuth) { // user sign in
           const userRef = await createUserProfileDocument(userAuth);

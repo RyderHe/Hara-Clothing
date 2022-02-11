@@ -13,6 +13,7 @@ const config = {
 };
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
+    console.log("Inside createUserProfileDocument:   ")
     console.log("userAuth: ", userAuth);
     if (!userAuth) {
         return;
@@ -26,6 +27,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     const snapshot = await userRef.get();
     console.log("snapshot: ", snapshot)
 
+    // If current user does not exists in datastore, add it.
     if (!snapshot.exists) {
         const { displayName, email } = userAuth;
         const cretaedAt = new Date();
@@ -47,9 +49,10 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 firebase.initializeApp(config);
 
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
+export const auth = firebase.auth(); // authentication
+export const firestore = firebase.firestore(); // datastore
 
+// authentication with Google Provider
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({ prompt: "select_account"});
 export const signInWithGoogle = () => auth.signInWithPopup(provider);
